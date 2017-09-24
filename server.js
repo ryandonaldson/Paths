@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
       if (!err) {
         var out = [];
         files.forEach(function(file) {
-            var stats = fs.statSync(path + "/" +file);
+            var stats = fs.statSync("/home/legit_youtb56/Paths/" + file);
             if (stats.isFile()) {
                 out.push({"file": file, "mtime": stats.mtime.getTime()});
             }
