@@ -9,7 +9,7 @@ server.listen(3000, () => console.log(`Paths livestream server is now running on
 const io = require("socket.io")(server);
 
 const emitter = new EventEmitter();
-emitter.on("attempt_connection", (stream) => console.log("New user attempted to connect to Paths livestream server!"));
+emitter.on("attempt_connection", (stream) => console.log("A user attempted to connect to Paths livestream server!"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -21,4 +21,16 @@ app.get("/", (request, response) => {
   response.header("Content-Type", "application/json")
   response.send(JSON.stringify(error));
   emitter.emit("attempt_connection");
+});
+
+io.on("connection", (socket) => {
+  console.log("A user successfully connected to Paths livestream server!")
+
+  socket.on("create", (room) => {
+    socket.join(room.key);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected from Paths livestream server!");
+  });
 });
