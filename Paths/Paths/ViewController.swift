@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var hudView: UIView!
     @IBOutlet weak var objectDetectLabel: UILabel!
     
+    var secretKey: String?
+    
     let socket = SocketIOClient(socketURL: URL(string: "http://35.202.142.142:3000")!, config: [
             .log(true),
             .reconnects(true),
@@ -66,16 +68,16 @@ class ViewController: UIViewController {
         self.streamingButton.isHidden = true
         self.view.backgroundColor = UIColor.white
         
-        let secretKey = generateSecretKey(length: 10)
+        self.secretKey = generateSecretKey(length: 10)
         socket.connect()
         socket.on(clientEvent: .connect) { data, ack in
-            self.socket.emit("create", ["key": secretKey])
-            self.socket.emit("stream_started", ["key": secretKey])
+            self.socket.emit("create", ["key": self.secretKey])
+            self.socket.emit("stream_started", ["key": self.secretKey])
         }
     
         let stream = LFLiveStreamInfo()
-        print("Secret Key: \(secretKey)")
-        stream.url = "rtmp://35.202.142.142/stream/\(secretKey)"
+        print("Secret Key: \(secretKey!)")
+        stream.url = "rtmp://35.202.142.142/stream/\(secretKey!)"
         session.running = true
         session.startLive(stream)
     }
@@ -121,7 +123,7 @@ extension ViewController: CLLocationManagerDelegate {
         let longitude = location.longitude
         print("Updated location: \(latitude) - \(longitude)")
         // Rework this to include secret stream key for user
-        self.socket.emit("location_update", ["latitude": latitude, "longitude": longitude])
+        self.socket.emit("location_update", ["key": secretKey!, "latitude": latitude, "longitude": longitude])
     }
 }
 

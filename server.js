@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
   socket.on("location_update", (stream) => {
     const executeCommand = util.promisify(process.exec);
 
+    const secretKey = stream.key;
     const latitude = stream.latitude;
     const longitude = stream.longitude;
     console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude}`)
