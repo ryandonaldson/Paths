@@ -55,7 +55,6 @@ io.on("connection", (socket) => {
     const longitude = stream.longitude;
 
     console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude} `);
-    socket.emit("recent_snapshot", {"key": secretKey});
   });
 
   socket.on("recent_snapshot", (stream) => {
