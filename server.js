@@ -13,7 +13,7 @@ const gcloud = require('@google-cloud/vision');
 //   projectId: '362df505f5ade3f61ae9b9845837c41f3ca5d4cb'
 // });
 
-const vision = Vision();
+const vision = gcloud.Vision();
 
 const server = http.createServer(app);
 server.listen(3000, () => console.log(`Paths livestream server is now running on port ${server.address().port}!`));
