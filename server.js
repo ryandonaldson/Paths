@@ -46,6 +46,12 @@ io.on("connection", (socket) => {
     startSnapshot();
   });
 
+  socket.on("location_update", (stream) => {
+    const latitude = stream.latitude;
+    const longitude = stream.longitude;
+    console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude}`)
+  });
+
   socket.on("disconnect", () => {
     console.log("A user disconnected from Paths livestream server!");
 

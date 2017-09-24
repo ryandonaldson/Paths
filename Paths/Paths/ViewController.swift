@@ -9,11 +9,15 @@
 import UIKit
 import SocketIO
 import LFLiveKit
+import CoreLocation
 
-class ViewController: UIViewController, LFLiveSessionDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet weak var pathsLabel: UILabel!
     @IBOutlet weak var streamingButton: UIButton!
+    
+    @IBOutlet weak var hudView: UIView!
+    @IBOutlet weak var objectDetectLabel: UILabel!
     
     let socket = SocketIOClient(socketURL: URL(string: "http://35.202.142.142:3000")!, config: [
             .log(true),
@@ -23,6 +27,8 @@ class ViewController: UIViewController, LFLiveSessionDelegate {
             .forceWebsockets(true)
         ]
     )
+    
+    let locationManager = CLLocationManager()
     
     lazy var session: LFLiveSession = {
         let audioConfiguration = LFLiveAudioConfiguration.default()
@@ -35,9 +41,21 @@ class ViewController: UIViewController, LFLiveSessionDelegate {
         return session
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.hudView.isHidden = true
+        self.objectDetectLabel.isHidden = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.startUpdatingLocation()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,13 +102,25 @@ class ViewController: UIViewController, LFLiveSessionDelegate {
         
         return randomString
     }
-    
+}
+
+extension ViewController: LFLiveSessionDelegate {
     func liveSession(_ session: LFLiveSession?, debugInfo: LFLiveDebug?) {
         print("Debug: \(debugInfo?.currentCapturedVideoCount)")
     }
     
     func liveSession(_ session: LFLiveSession?, errorCode: LFLiveSocketErrorCode) {
         print("Error: \(errorCode)")
+    }
+}
+
+extension ViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let newLocation = manager.location?.coordinate
+        let latitude = newLocation?.latitude
+        let longitude = newLocation?.longitude
+        // Rework this to include secret stream key for user
+        self.socket.emit("location_update", ["latitude": latitude, "longitude": longitude])
     }
 }
 

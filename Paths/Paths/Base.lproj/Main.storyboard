@@ -51,18 +51,42 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eju-1r-tME">
+                                <rect key="frame" x="16" y="583" width="343" height="64"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We detected a Tree object ahead!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rvG-fT-n88">
+                                        <rect key="frame" x="48.5" y="8" width="246.5" height="48"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.89427347715736039" green="0.10000715155385395" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="rvG-fT-n88" firstAttribute="centerY" secondItem="eju-1r-tME" secondAttribute="centerY" id="RAZ-OZ-1YV"/>
+                                    <constraint firstAttribute="bottom" secondItem="rvG-fT-n88" secondAttribute="bottom" constant="8" id="c6d-hS-aKi"/>
+                                    <constraint firstItem="rvG-fT-n88" firstAttribute="centerX" secondItem="eju-1r-tME" secondAttribute="centerX" id="j7u-Vi-2DI"/>
+                                    <constraint firstItem="rvG-fT-n88" firstAttribute="top" secondItem="eju-1r-tME" secondAttribute="top" constant="8" id="vv6-ug-Gch"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.93040639162063599" green="0.42178636789321899" blue="0.27852427959442139" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Sn8-hg-y20" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Hdd-Ea-VWi"/>
+                            <constraint firstItem="eju-1r-tME" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="Jy5-Tk-GBb"/>
                             <constraint firstItem="BcE-gf-E3c" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="LMV-Wy-5kR"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="Sn8-hg-y20" secondAttribute="leading" id="Q7g-FG-nsX"/>
+                            <constraint firstAttribute="leadingMargin" relation="greaterThanOrEqual" secondItem="Sn8-hg-y20" secondAttribute="leading" id="Q7g-FG-nsX"/>
+                            <constraint firstAttribute="trailing" secondItem="eju-1r-tME" secondAttribute="trailing" constant="16" id="QHo-fp-rLp"/>
                             <constraint firstItem="BcE-gf-E3c" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="S6T-8o-MyA"/>
+                            <constraint firstItem="eju-1r-tME" firstAttribute="top" secondItem="BcE-gf-E3c" secondAttribute="bottom" constant="224.5" id="TxU-x3-YMI"/>
                             <constraint firstItem="BcE-gf-E3c" firstAttribute="top" secondItem="Sn8-hg-y20" secondAttribute="bottom" constant="8" id="ora-9n-oy3"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Sn8-hg-y20" secondAttribute="trailing" id="s9K-eL-3JX"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="eju-1r-tME" secondAttribute="bottom" constant="20" id="q0S-mD-jrm"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="Sn8-hg-y20" secondAttribute="trailing" id="s9K-eL-3JX"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="hudView" destination="eju-1r-tME" id="hqu-bh-P7R"/>
+                        <outlet property="objectDetectLabel" destination="rvG-fT-n88" id="pZ8-eR-bZ7"/>
                         <outlet property="pathsLabel" destination="Sn8-hg-y20" id="UjS-M0-y2e"/>
                         <outlet property="streamingButton" destination="BcE-gf-E3c" id="2MU-SX-dXO"/>
                     </connections>
