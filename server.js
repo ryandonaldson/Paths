@@ -59,9 +59,8 @@ io.on("connection", (socket) => {
 
   socket.on("recent_snapshot", (stream) => {
     let secretKey = stream.key;
-    fs.readdir(audioFilePath, function(err, files) {
+    fs.readdir("~", function(err, files) {
       if (!err) {
-        var audioFile = getNewestFile(files, "~");
         var out = [];
         files.forEach(function(file) {
             var stats = fs.statSync(path + "/" +file);
@@ -73,7 +72,7 @@ io.on("connection", (socket) => {
             return b.mtime - a.mtime;
         })
         const file = (out.length > 0) ? out[0].file : "";
-        console.log(audioFile);
+        console.log(file); 
       }
     });
   });
