@@ -51,8 +51,10 @@ class ViewController: UIViewController, LFLiveSessionDelegate {
         self.view.backgroundColor = UIColor.white
         
         let secretKey = generateSecretKey(length: 10)
+        socket.connect()
         socket.on(clientEvent: .connect) { data, ack in
             self.socket.emit("create", ["key": secretKey])
+            self.socket.emit("stream_started", ["key": secretKey])
         }
     
         let stream = LFLiveStreamInfo()
@@ -60,8 +62,6 @@ class ViewController: UIViewController, LFLiveSessionDelegate {
         stream.url = "rtmp://35.202.142.142/stream/\(secretKey)"
         session.running = true
         session.startLive(stream)
-        
-        self.socket.emit("stream_started", ["key": secretKey])
     }
     
     override func viewWillDisappear(_ animated: Bool) {
