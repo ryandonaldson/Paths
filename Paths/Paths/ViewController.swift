@@ -123,7 +123,9 @@ extension ViewController: CLLocationManagerDelegate {
         let longitude = location.longitude
         print("Updated location: \(latitude) - \(longitude)")
         // Rework this to include secret stream key for user
-        self.socket.emit("location_update", ["key": secretKey!, "latitude": latitude, "longitude": longitude])
+        if let key = secretKey {
+            self.socket.emit("location_update", ["key": key, "latitude": latitude, "longitude": longitude])
+        }
     }
 }
 
