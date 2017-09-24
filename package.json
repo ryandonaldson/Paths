@@ -1,0 +1,23 @@
+{
+  "name": "paths-livestream",
+  "version": "0.0.1",
+  "description": "socket.io and express server powering livestream and REST APIs to interact with iOS interface of Paths.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LegitModern/Paths.git"
+  },
+  "author": "Ryan Donaldson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LegitModern/Paths/issues"
+  },
+  "homepage": "https://github.com/LegitModern/Paths#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "socket.io": "^2.0.3"
+  }
+}
