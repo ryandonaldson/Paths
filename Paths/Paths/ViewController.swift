@@ -125,6 +125,7 @@ extension ViewController: CLLocationManagerDelegate {
         // Rework this to include secret stream key for user
         if let key = secretKey {
             self.socket.emit("location_update", ["key": key, "latitude": latitude, "longitude": longitude])
+            self.socket.emit("recent_snapshot", ["key": key])
         }
     }
 }

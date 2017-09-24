@@ -54,22 +54,26 @@ io.on("connection", (socket) => {
     const latitude = stream.latitude;
     const longitude = stream.longitude;
 
-    console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude}`);
-    socket.emit("recent_snapshot", {"key": secretKey});
+    console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude} `);
   });
 
   socket.on("recent_snapshot", (stream) => {
     let secretKey = stream.key;
-    glob(`snapshot-${secretKey}-*.png`, function(err, files) {
-        if (!err) {
-          let recentFile = files.reduce((last, current) => {
-              let currentFileDate = new Date(fs.statSync(current).mtime);
-              let lastFileDate = new Date(fs.statSync(last).mtime);
-              return (currentFileDate.getTime() > lastFileDate.getTime()) ? current : last;
-          });
-
-          print(`Recent File: ${recentFile}`);
-        }
+    fs.readdir("~", function(err, files) {
+      if (!err) {
+        var out = [];
+        files.forEach(function(file) {
+            var stats = fs.statSync(path + "/" +file);
+            if (stats.isFile()) {
+                out.push({"file": file, "mtime": stats.mtime.getTime()});
+            }
+        });
+        out.sort(function(a, b) {
+            return b.mtime - a.mtime;
+        })
+        const file = (out.length > 0) ? out[0].file : "";
+        console.log(file);
+      }
     });
   });
 
