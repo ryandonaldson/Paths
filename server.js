@@ -37,6 +37,14 @@ io.on("connection", (socket) => {
   socket.on("stream_started", (stream) => {
     const secretKey = stream.key;
     console.log(`Stream started - secret key is ${secretKey}`);
+
+    const executeCommand = util.promisify(process.exec);
+    async function takeSnapshot() {
+      const { output, error } = await executeCommand(`ffmpeg -i rtmp://35.202.142.142:1935/stream/${secretKey} -f image2 -vf fps=fps=1/5 snapshot-${secretKey}-%d.png`);
+      console.log(`Output parsed: ${output}`);
+      console.log(`Error occured: ${error}`);
+    }
+    takeSnapshot();
   });
 
   socket.on("location_update", (stream) => {
@@ -45,14 +53,8 @@ io.on("connection", (socket) => {
     const secretKey = stream.key;
     const latitude = stream.latitude;
     const longitude = stream.longitude;
-    console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude}`)
 
-    async function takeSnapshot() {
-      const { output, error } = await executeCommand(`ffmpeg -i rtmp://35.202.142.142:1935/stream/${secretKey} -f image2 -vframes 1 snapshot-${secretKey}-%d.png`);
-      console.log(`Output parsed: ${output}`);
-      console.log(`Error occured: ${error}`);
-    }
-    takeSnapshot();
+    console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude} `);
     socket.emit("recent_snapshot", {"key": secretKey});
   });
 
