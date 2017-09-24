@@ -60,16 +60,22 @@ io.on("connection", (socket) => {
 
   socket.on("recent_snapshot", (stream) => {
     let secretKey = stream.key;
-    glob(`*.png`, function(err, files) {
-        if (!err) {
-          let recentFile = files.reduce((last, current) => {
-              let currentFileDate = new Date(fs.statSync(current).mtime);
-              let lastFileDate = new Date(fs.statSync(last).mtime);
-              return (currentFileDate.getTime() > lastFileDate.getTime()) ? current : last;
-          });
-
-          print(`Recent File: ${recentFile}`);
-        }
+    fs.readdir(audioFilePath, function(err, files) {
+      if (!err) {
+        var audioFile = getNewestFile(files, "~");
+        var out = [];
+        files.forEach(function(file) {
+            var stats = fs.statSync(path + "/" +file);
+            if (stats.isFile()) {
+                out.push({"file": file, "mtime": stats.mtime.getTime()});
+            }
+        });
+        out.sort(function(a, b) {
+            return b.mtime - a.mtime;
+        })
+        const file = (out.length > 0) ? out[0].file : "";
+        console.log(audioFile);
+      }
     });
   });
 
