@@ -60,6 +60,8 @@ class ViewController: UIViewController, LFLiveSessionDelegate {
         stream.url = "rtmp://35.202.142.142/stream/\(secretKey)"
         session.running = true
         session.startLive(stream)
+        
+        self.socket.emit("stream_started", ["key": secretKey])
     }
     
     override func viewWillDisappear(_ animated: Bool) {
