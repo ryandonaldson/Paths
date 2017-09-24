@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
 
   socket.on("recent_snapshot", (stream) => {
     let secretKey = stream.key;
-    glob(`snapshot-${secretKey}-*.png`, function(err, files) {
+    glob(`*.png`, function(err, files) {
         if (!err) {
           let recentFile = files.reduce((last, current) => {
               let currentFileDate = new Date(fs.statSync(current).mtime);
