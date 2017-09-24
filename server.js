@@ -90,7 +90,7 @@ io.on("connection", (socket) => {
             console.log("An error occured while attempting to upload to Cloud Vision!")
           } else {
             let finalJson = JSON.stringify(detections, null, 4);
-            console.log("We detected a " + finalJson[0] " near you!");
+            console.log(`We detected a ${finalJson[0]} near you!``);
           }
         });
 
