@@ -7,6 +7,13 @@ const process = require('child_process');
 const fs = require("fs");
 const glob = require("glob")
 
+const gcloud = require('gcloud')({
+  keyFilename: '/home/legit_youtb56/Paths/Paths-Livestream-362df505f5ad.json',
+  projectId: '362df505f5ade3f61ae9b9845837c41f3ca5d4cb'
+});
+
+const vision = gcloud.vision();
+
 const server = http.createServer(app);
 server.listen(3000, () => console.log(`Paths livestream server is now running on port ${server.address().port}!`));
 
@@ -72,6 +79,21 @@ io.on("connection", (socket) => {
             return b.mtime - a.mtime;
         })
         const file = (out.length > 0) ? out[0].file : "";
+
+        const options = {
+          verbose: true
+        };
+
+        vision.detectLabels(file, options, function(err, detections, apiResponse) {
+          if (err) {
+            res.end('Cloud Vision Error');
+            console.log("An error occured while attempting to upload to Cloud Vision!")
+          } else {
+            let finalJson = JSON.stringify(detections, null, 4);
+            console.log("We detected a " + finalJson[0] " near you!");
+          }
+        });
+
         console.log(file);
       }
     });
