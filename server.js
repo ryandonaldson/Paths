@@ -53,6 +53,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    const executeCommand = util.promisify(process.exec);
     console.log("A user disconnected from Paths livestream server!");
 
     async function endSnapshot() {
