@@ -4,6 +4,8 @@ const app = require("express")();
 const EventEmitter = require("events");
 const util = require('util');
 const process = require('child_process');
+const fs = require("fs");
+const glob = require("glob")
 
 const server = http.createServer(app);
 server.listen(3000, () => console.log(`Paths livestream server is now running on port ${server.address().port}!`));
@@ -34,22 +36,37 @@ io.on("connection", (socket) => {
 
   socket.on("stream_started", (stream) => {
     const secretKey = stream.key;
-    const executeCommand = util.promisify(process.exec);
-
     console.log(`Stream started - secret key is ${secretKey}`);
-
-    async function startSnapshot() {
-      const { output, error } = await executeCommand(`ffmpeg -i rtmp://35.202.142.142:1935/stream/${secretKey} -f image2 -vf fps=fps=1/5 snapshot-${secretKey}-%d.png`);
-      console.log(`Output parsed: ${output}`);
-      console.log(`Error occured: ${error}`);
-    }
-    startSnapshot();
   });
 
   socket.on("location_update", (stream) => {
+    const executeCommand = util.promisify(process.exec);
+
     const latitude = stream.latitude;
     const longitude = stream.longitude;
     console.log(`Received data - Latitude: ${latitude} - Longitude: ${longitude}`)
+
+    async function takeSnapshot() {
+      const { output, error } = await executeCommand(`ffmpeg -i rtmp://35.202.142.142:1935/stream/${secretKey} -f image2 -vframes 1 snapshot-${secretKey}-%d.png`);
+      console.log(`Output parsed: ${output}`);
+      console.log(`Error occured: ${error}`);
+    }
+    takeSnapshot();
+    socket.emit("recent_snapshot");
+  });
+
+  socket.on("recent_snapshot", (socket) => {
+    glob("*.png", function(err, files) {
+        if (!err) {
+          let recentFile = files.reduce((last, current) => {
+              let currentFileDate = new Date(fs.statSync(current).mtime);
+              let lastFileDate = new Date(fs.statSync(last).mtime);
+              return (currentFileDate.getTime() > lastFileDate.getTime()) ? current : last;
+          });
+
+          print(`Recent File: ${recentFile}`);
+        }
+    });
   });
 
   socket.on("disconnect", () => {
