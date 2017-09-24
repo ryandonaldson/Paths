@@ -50,12 +50,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            self.locationManager.startUpdatingLocation()
-        }
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.startUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {
@@ -116,9 +114,12 @@ extension ViewController: LFLiveSessionDelegate {
 
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let newLocation = manager.location?.coordinate
-        let latitude = newLocation?.latitude
-        let longitude = newLocation?.longitude
+        guard let location = manager.location?.coordinate else {
+            return
+        }
+        let latitude = location.latitude
+        let longitude = location.longitude
+        print("Updated location: \(latitude) - \(longitude)")
         // Rework this to include secret stream key for user
         self.socket.emit("location_update", ["latitude": latitude, "longitude": longitude])
     }
