@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
       console.log(`Error occured: ${error}`);
     }
     takeSnapshot();
-    socket.emit("recent_snapshot", {"key": secretKey};
+    socket.emit("recent_snapshot", {"key": secretKey});
   });
 
   socket.on("recent_snapshot", (stream) => {
