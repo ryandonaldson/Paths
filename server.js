@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
 
   socket.on("recent_snapshot", (stream) => {
     let secretKey = stream.key;
-    fs.readdir("~", function(err, files) {
+    fs.readdir("~/home/legit_youtb56/Paths/", function(err, files) {
       if (!err) {
         var out = [];
         files.forEach(function(file) {
@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
             return b.mtime - a.mtime;
         })
         const file = (out.length > 0) ? out[0].file : "";
-        console.log(file); 
+        console.log(file);
       }
     });
   });
