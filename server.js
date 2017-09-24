@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
 
   socket.on("recent_snapshot", (stream) => {
     let secretKey = stream.key;
-    fs.readdir("~/home/legit_youtb56/Paths/", function(err, files) {
+    fs.readdir("/home/legit_youtb56/Paths/", function(err, files) {
       if (!err) {
         var out = [];
         files.forEach(function(file) {
