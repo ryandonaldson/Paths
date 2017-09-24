@@ -48,5 +48,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("A user disconnected from Paths livestream server!");
+
+    async function endSnapshot() {
+      const { output, error } = await executeCommand("sudo killall ffmpeg");
+      console.log(`Output parsed: ${output}`);
+      console.log(`Error occured: ${error}`);
+    }
+    endSnapshot();
   });
 });
