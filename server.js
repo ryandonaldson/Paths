@@ -53,11 +53,12 @@ io.on("connection", (socket) => {
       console.log(`Error occured: ${error}`);
     }
     takeSnapshot();
-    socket.emit("recent_snapshot");
+    socket.emit("recent_snapshot", ["key": secretKey]);
   });
 
   socket.on("recent_snapshot", (socket) => {
-    glob("*.png", function(err, files) {
+    let secretKey = socket.key;
+    glob(`snapshot-${secretKey}-*.png`, function(err, files) {
         if (!err) {
           let recentFile = files.reduce((last, current) => {
               let currentFileDate = new Date(fs.statSync(current).mtime);
