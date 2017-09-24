@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
           verbose: true
         };
 
-        vision.labelDetection({ source: { filename: fileName } })
+        vision.labelDetection({ source: { filename: file } })
           .then((results) => {
             const labels = results[0].labelAnnotations;
             labels.forEach((label) => console.log(`We detected a ${label} object near you!`));
